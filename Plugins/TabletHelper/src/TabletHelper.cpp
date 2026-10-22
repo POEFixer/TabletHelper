@@ -9,7 +9,7 @@
 POEFIXER_PLUGIN_INFO(
     "TabletHelper",
     "Tablet Helper",
-    "1.4.3",
+    "1.4.4",
     "Omer Faruk ARPA, POEFixer",
     "Highlights Precursor Tablets in your inventory, stash, guild stash and merchant windows, coloured by type and filtered by bonuses, roll values and uses left.")
 
