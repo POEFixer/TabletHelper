@@ -121,6 +121,9 @@ void TabletHelperPlugin::DrawSettings() {
     DrawSectionProfiles();
     DrawSectionTypes();
     DrawSectionDiagnostics();
+    ImGui::Spacing();
+    PluginUi::Hint("Originally created by Omer Faruk ARPA. Maintained by POEFixer. GPL-3.0.");
+    ImGui::Spacing();
     ImGui::PopID();
 
     if (m_filterDirty) PushFilter();
@@ -132,13 +135,13 @@ void TabletHelperPlugin::DrawSettings() {
 // ---------------------------------------------------------------------------
 void TabletHelperPlugin::DrawSectionStatus() {
     Ui::BeginCard("##status");
-    Ui::Heading(ICON_FA_GEM, "Precursor Tablets");
-    Ui::HelpMarker("Open your inventory, a stash tab (the Tablet stash too), the guild stash or a merchant: "
-                   "matching tablets are outlined in their type's colour.\n\n"
-                   "Each tablet type has its own rule below. A rule without bonuses highlights every tablet "
-                   "of that type; pick bonuses to highlight only tablets that carry them. "
-                   "\"All types\" is an extra rule that applies to every type.\n\n"
-                   "Filter profiles keep several sets of rules you can switch between.");
+    Ui::Heading(ICON_FA_GEM, "Precursor Tablets",
+                "Open your inventory, a stash tab (the Tablet stash too), the guild stash or a merchant: "
+                "matching tablets are outlined in their type's colour.\n\n"
+                "Each tablet type has its own rule below. A rule without bonuses highlights every tablet "
+                "of that type; pick bonuses to highlight only tablets that carry them. "
+                "\"All types\" is an extra rule that applies to every type.\n\n"
+                "Filter profiles keep several sets of rules you can switch between.");
     Ui::Hint("Highlights Precursor Tablets in every open item window, coloured by type and filtered by "
              "their bonuses and uses left.");
     ImGui::Spacing();
@@ -311,10 +314,10 @@ void TabletHelperPlugin::DrawSectionProfiles() {
     if (s.activeProfile < 0 || s.activeProfile >= static_cast<int>(profiles.size())) s.activeProfile = 0;
 
     Ui::BeginCard("##profiles");
-    Ui::Heading(ICON_FA_LAYER_GROUP, "Filter profiles");
-    Ui::HelpMarker("A profile is a complete set of tablet rules: colours, bonuses and uses left for every "
-                   "type. Keep one per strategy and switch here. Highlight, label and detection options "
-                   "are shared by all profiles.");
+    Ui::Heading(ICON_FA_LAYER_GROUP, "Filter profiles",
+                "A profile is a complete set of tablet rules: colours, bonuses and uses left for every "
+                "type. Keep one per strategy and switch here. Highlight, label and detection options "
+                "are shared by all profiles.");
 
     const Ui::LabelColumn col({"Active profile", "Name"});
     col.Row("Active profile");
@@ -393,12 +396,12 @@ void TabletHelperPlugin::DrawSectionProfiles() {
 void TabletHelperPlugin::DrawSectionTypes() {
     auto& types = m_settings.ActiveTypes();
     Ui::BeginCard("##types");
-    Ui::Heading(ICON_FA_TABLE_CELLS, "Tablet types");
-    Ui::HelpMarker("Tick a type to highlight it and pick its colour. \"Edit\" opens the type's filter: "
-                   "bonuses, roll values and uses left.\n\n"
-                   "\"All types\" is an extra rule tested on every tablet. A tablet its own type's rule "
-                   "does not highlight is still highlighted, in the \"All types\" colour, when that rule "
-                   "accepts it.");
+    Ui::Heading(ICON_FA_TABLE_CELLS, "Tablet types",
+                "Tick a type to highlight it and pick its colour. \"Edit\" opens the type's filter: "
+                "bonuses, roll values and uses left.\n\n"
+                "\"All types\" is an extra rule tested on every tablet. A tablet its own type's rule "
+                "does not highlight is still highlighted, in the \"All types\" colour, when that rule "
+                "accepts it.");
 
     const ImGuiStyle& st = ImGui::GetStyle();
     const float editW = Ui::ButtonWidth(ICON_FA_PEN "  Close");
@@ -695,11 +698,7 @@ void TabletHelperPlugin::DrawBonusTable(TypeConfig& t) {
 // Diagnostics (collapsed)
 // ---------------------------------------------------------------------------
 void TabletHelperPlugin::DrawSectionDiagnostics() {
-    Ui::BeginCard("##diagnostics");
-    ImGui::PushStyleColor(ImGuiCol_Text, Ui::Colors().Accent);
-    const bool open = ImGui::TreeNodeEx(ICON_FA_STETHOSCOPE "  Diagnostics###diag", ImGuiTreeNodeFlags_SpanAvailWidth);
-    ImGui::PopStyleColor();
-    if (open) {
+    if (Ui::BeginDiagnostics("Read timings, modifier reads, remembered tablets, roll ranges and a modifier dump.")) {
         const auto st = m_worker ? m_worker->Stats() : TabletHelper::WorkerStats{};
         char buf[160];
         const Ui::LabelColumn col({"Last read", "Modifier reads", "Remembered tablets", "Mod ranges"});
@@ -755,8 +754,7 @@ void TabletHelperPlugin::DrawSectionDiagnostics() {
             ImGui::TextDisabled("%s", m_diagStatus.c_str());
             ImGui::PopTextWrapPos();
         }
-        ImGui::TreePop();
+        Ui::EndDiagnostics();
     }
-    Ui::EndCard();
     ImGui::Spacing();
 }
