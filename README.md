@@ -1,6 +1,6 @@
 # Tablet Helper
 
-Current version: 1.4.4
+Current version: 1.4.5
 
 Requires POE2Fixer 364 or newer.
 
