@@ -14,9 +14,17 @@
 #include "../../../POEFixer/plugin_sdk/PluginSDK.h"
 
 #include <chrono>
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
+
+namespace TabletHelper {
+// The English text of a key of lang/en.json whatever the program language (the embedded
+// English, defined next to it in TabletHelper.cpp); the key itself when it is not one.
+const char* EnglishText(const char* key);
+} // namespace TabletHelper
 
 class TabletHelperPlugin : public PluginSDK::Plugin {
 public:
@@ -49,6 +57,7 @@ private:
     void DrawSectionTypes();
     void DrawTypeEditor(TabletHelperConfig::TypeConfig& t);
     void DrawBonusTable(TabletHelperConfig::TypeConfig& t);
+    const std::vector<const TabletHelper::Bonus*>& OrderedBonuses(const std::string& typeKey);
     bool DrawValueField(const char* id, int* v, int lo, int hi);
     void DrawSectionDiagnostics();
 
@@ -66,6 +75,13 @@ private:
     std::unordered_map<std::string, std::string> m_bonusSearch;  // per type key
     std::unordered_map<std::string, bool> m_onlySelected;        // per type key
     std::string m_openType;                                      // the type whose editor is open
-    std::string m_diagStatus;
+    // Per type key: its bonuses by category, then by label in the program language;
+    // rebuilt when PluginSDK::I18n::Revision() moves.
+    std::unordered_map<std::string, std::vector<const TabletHelper::Bonus*>> m_bonusOrder;
+    uint64_t m_bonusOrderRevision = ~0ull;
+    // The last modifier-dump action, worded when drawn (in the program language).
+    enum class DumpStatus { None, Appended, WriteFailed, Removed };
+    DumpStatus m_dumpStatus = DumpStatus::None;
+    std::string m_dumpPath;
     int m_dumpCount = 0;
 };

@@ -1,17 +1,35 @@
 // Tablet Helper - POEFixer plugin (SDK v6).
 // Originally created by Omer Faruk ARPA (GPL-3.0); maintained by POEFixer.
 
-#include "TabletHelperPlugin.h"
+#include "TabletHelperPlugin.h"   // PluginSDK.h
+#include "lang_en.generated.h"    // the embedded English: once per DLL, after PluginSDK.h
 
 #include "../../../POEFixer/imgui/imgui.h"
+
+#include <algorithm>
+#include <cstring>
+#include <iterator>
 
 // Plugin info: the host checks it before CreatePlugin; the publish tool reads it.
 POEFIXER_PLUGIN_INFO(
     "TabletHelper",
     "Tablet Helper",
-    "1.4.5",
+    "1.4.6",
     "Omer Faruk ARPA, POEFixer",
     "Highlights Precursor Tablets in your inventory, stash, guild stash and merchant windows, coloured by type and filtered by bonuses, roll values and uses left.")
+
+namespace TabletHelper {
+const char* EnglishText(const char* key) {
+    if (!key) return "";
+    // kPluginLangEn is sorted by key (tools/plugin_i18n/gen.py).
+    const auto* begin = std::begin(kPluginLangEn);
+    const auto* end = std::end(kPluginLangEn);
+    const auto* it = std::lower_bound(begin, end, key, [](const PluginSDK::I18n::Entry& e, const char* k) {
+        return std::strcmp(e.key, k) < 0;
+    });
+    return (it != end && std::strcmp(it->key, key) == 0) ? it->text : key;
+}
+} // namespace TabletHelper
 
 TabletHelperPlugin::~TabletHelperPlugin() {
     // The host normally calls OnDisable first; this covers an unload without it.

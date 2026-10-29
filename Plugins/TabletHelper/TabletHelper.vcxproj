@@ -111,7 +111,9 @@
     <ClInclude Include="src\TabletRanges.h" />
     <ClInclude Include="src\TabletScanner.h" />
     <ClInclude Include="src\TabletTypes.h" />
+    <ClInclude Include="src\TextUtil.h" />
     <ClInclude Include="src\TabletWorker.h" />
+    <ClInclude Include="src\lang_en.generated.h" />
     <ClInclude Include="lib\nlohmann\json.hpp" />
     <ClInclude Include="..\..\POEFixer\plugin_sdk\PluginAbi.h" />
     <ClInclude Include="..\..\POEFixer\plugin_sdk\PluginSDK.h" />

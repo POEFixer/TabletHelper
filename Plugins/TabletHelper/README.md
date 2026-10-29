@@ -86,6 +86,10 @@ entries with an optional `config/tablet_mod_ranges.json`:
   been checked against the tooltip for every bonus.
 - Tablets are recognised by their item path (`TowerAugment`), so unique tablets count as their
   base type.
+- Languages: the plugin follows the program language. A profile made with **New** or
+  **Duplicate** is named in the language of that moment ("Profile 2", "Профиль 2") and keeps that
+  name after a language switch, like any name you type; only the shipped "Default" profile follows
+  the language. The bonus search also finds a bonus by its English name.
 
 ## Credits
 

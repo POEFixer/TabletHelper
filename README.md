@@ -1,6 +1,6 @@
 # Tablet Helper
 
-Current version: 1.4.5
+Current version: 1.4.6
 
 Requires POE2Fixer 364 or newer.
 
@@ -90,6 +90,10 @@ entries with an optional `config/tablet_mod_ranges.json`:
   been checked against the tooltip for every bonus.
 - Tablets are recognised by their item path (`TowerAugment`), so unique tablets count as their
   base type.
+- Languages: the plugin follows the program language. A profile made with **New** or
+  **Duplicate** is named in the language of that moment ("Profile 2", "Профиль 2") and keeps that
+  name after a language switch, like any name you type; only the shipped "Default" profile follows
+  the language. The bonus search also finds a bonus by its English name.
 
 ## Install
 
@@ -101,11 +105,12 @@ This repository is the plugin folder from the POE2Fixer source tree (`Plugins/Ta
 
 - `POEFixer/plugin_sdk/` - the POE2Fixer Plugin SDK v6 headers (`PluginAbi.h`, `PluginSDK.h`)
 - `POEFixer/imgui/` - the Dear ImGui sources the DLL compiles against
+- `tools/plugin_i18n/gen.py` - the translation tool: after editing `Plugins/TabletHelper/lang/en.json` run `python tools/plugin_i18n/gen.py Plugins/TabletHelper` (it rewrites the embedded English header); `--gate` checks every language file and the keys the sources use
 
 1. Install Visual Studio 2022 with the "Desktop development with C++" workload (MSVC v143, Windows 10/11 SDK).
 2. Open `TabletHelper.sln`, select **Release | x64** and build the solution.
 3. The plugin is written to `x64\Release\Plugins\TabletHelper\TabletHelper.dll` (Release builds carry no debug information, see `Directory.Build.targets`).
-4. Copy `TabletHelper.dll` into `Plugins\TabletHelper\` next to the POE2Fixer executable.
+4. Copy `TabletHelper.dll` into `Plugins\TabletHelper\` next to the POE2Fixer executable, together with `Plugins\TabletHelper\lang` from this repository (same folder names).
 
 ## Credits
 

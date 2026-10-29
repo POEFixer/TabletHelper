@@ -1,4 +1,5 @@
 #include "HighlightRenderer.h"
+#include "TextUtil.h"
 
 #include "../../../POEFixer/plugin_sdk/PluginUi.h"
 
@@ -10,6 +11,17 @@
 namespace TabletHelper {
 
 namespace {
+
+namespace I18n = PluginSDK::I18n;
+
+// The label drawn on the tablet, in the program language.
+const char* ShortName(std::string_view typeKey) { return I18n::Tr(TypeShortKey(typeKey)); }
+
+// The three-letter label used when the short name does not fit the cell.
+const char* Abbreviation(std::string_view typeKey) {
+    const char* key = TypeAbbreviationKey(typeKey);
+    return key ? I18n::Tr(key) : "?";
+}
 
 constexpr float kPi = 3.14159265358979323846f;
 
@@ -164,13 +176,12 @@ void HighlightRenderer::BuildLayouts(const Frame& frame, const TabletHelperConfi
                         std::string text;
                         bool more = lastRoom && left > 1;  // the last line that fits counts the rest
                         if (!more) {
-                            text = Ellipsize(font, Fsmall, item.eval.bonuses[i]->Label, availW);
+                            text = Ellipsize(font, Fsmall, I18n::Tr(item.eval.bonuses[i]->LabelKey.c_str()), availW);
                             more = text.empty();
                         }
                         // A first name cut to a few letters says nothing: leave the
-                        // cell to the check-mark count below instead.
-                        if (i == 0 && (more || (text.size() >= 3 && text.compare(text.size() - 3, 3, "...") == 0 &&
-                                                text.size() - 3 < 8)))
+                        // cell to the check-mark count below instead (letters, not bytes).
+                        if (i == 0 && (more || CutBelow(text, 8)))
                             break;
                         if (more) text = "+" + std::to_string(left);
                         TextRun run;
@@ -212,10 +223,17 @@ void HighlightRenderer::Draw(ImDrawList* dl, const std::shared_ptr<const Frame>&
     if (!dl || !frame || frame->items.empty()) return;
     const float baseFont = ImGui::GetFontSize() *
                            std::clamp(s.labelScale, TabletHelperConfig::kLabelScaleMin, TabletHelperConfig::kLabelScaleMax);
+    // The layouts hold translated, measured text: a language switch or a font
+    // reload (the host reloads the fonts for another game language) rebuilds them.
+    ImFont* const currentFont = ImGui::GetFont();
+    const uint64_t textRevision = I18n::Revision();
     if (frame != m_frame || baseFont != m_baseFont || s.showLabel != m_showLabel || s.showUsesLeft != m_showUses ||
-        s.showMatchedBonuses != m_showBonuses || s.highlightMode != m_mode || s.borderThickness != m_thickness) {
+        s.showMatchedBonuses != m_showBonuses || s.highlightMode != m_mode || s.borderThickness != m_thickness ||
+        currentFont != m_font || textRevision != m_textRevision) {
         m_frame = frame;
         m_baseFont = baseFont;
+        m_font = currentFont;
+        m_textRevision = textRevision;
         m_showLabel = s.showLabel;
         m_showUses = s.showUsesLeft;
         m_showBonuses = s.showMatchedBonuses;

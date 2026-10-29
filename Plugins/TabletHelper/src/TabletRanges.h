@@ -129,7 +129,8 @@ inline const std::vector<RangeSeed>& BuiltInRanges() {
 class TabletRanges {
 public:
     // Built-in table, then the optional override file. Never throws. Returns a
-    // one-line summary for the log and the Diagnostics card.
+    // one-line English summary for the log (the Diagnostics card words the counts
+    // in the program language).
     std::string Load(const std::filesystem::path& pluginDir) {
         m_ranges.clear();
         for (const auto& s : BuiltInRanges()) Insert(s.id, ModRange{s.min, s.max, s.unit});
@@ -182,7 +183,9 @@ public:
         return m_summary;
     }
 
-    const std::string& Summary() const { return m_summary; }
+    const std::string& Summary() const { return m_summary; }   // English, for the log
+    std::size_t BuiltInCount() const { return m_builtIn; }
+    int OverrideCount() const { return m_overrides; }
 
     const ModRange* For(const std::string& normId) const {
         auto it = m_ranges.find(normId);

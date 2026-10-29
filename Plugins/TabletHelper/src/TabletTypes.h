@@ -116,45 +116,52 @@ inline bool IsRealType(std::string_view key) {
     return false;
 }
 
-// Name in the settings tab.
-inline const char* DisplayName(std::string_view key) {
-    if (key == TypeKeys::Irradiated) return "Irradiated Tablet";
-    if (key == TypeKeys::Breach)     return "Breach Tablet";
-    if (key == TypeKeys::Delirium)   return "Delirium Tablet";
-    if (key == TypeKeys::Expedition) return "Expedition Tablet";
-    if (key == TypeKeys::Abyss)      return "Abyss Tablet";
-    if (key == TypeKeys::Ritual)     return "Ritual Tablet";
-    if (key == TypeKeys::Overseer)   return "Overseer Tablet";
-    if (key == TypeKeys::Temple)     return "Temple Tablet";
-    if (key == TypeKeys::Global)     return "All types";
-    return "Unknown Tablet";
+// A lang/en.json key written where it is looked up later, at drawing time (what
+// PluginI18n.h's I18n::Key does; this header stays free of the SDK so the tests
+// compile it alone). tools/plugin_i18n/gen.py --gate checks every Key("...")
+// literal against lang/en.json.
+constexpr const char* Key(const char* key) { return key; }
+
+// Key of the type's name in the settings tab ("Breach Tablet").
+inline const char* TypeNameKey(std::string_view key) {
+    if (key == TypeKeys::Irradiated) return Key("type_name_irradiated");
+    if (key == TypeKeys::Breach)     return Key("type_name_breach");
+    if (key == TypeKeys::Delirium)   return Key("type_name_delirium");
+    if (key == TypeKeys::Expedition) return Key("type_name_expedition");
+    if (key == TypeKeys::Abyss)      return Key("type_name_abyss");
+    if (key == TypeKeys::Ritual)     return Key("type_name_ritual");
+    if (key == TypeKeys::Overseer)   return Key("type_name_overseer");
+    if (key == TypeKeys::Temple)     return Key("type_name_temple");
+    if (key == TypeKeys::Global)     return Key("type_name_global");
+    return Key("type_name_unknown");
 }
 
-// Label drawn on the tablet in game.
-inline const char* ShortName(std::string_view key) {
-    if (key == TypeKeys::Irradiated) return "Irradiated";
-    if (key == TypeKeys::Breach)     return "Breach";
-    if (key == TypeKeys::Delirium)   return "Delirium";
-    if (key == TypeKeys::Expedition) return "Expedition";
-    if (key == TypeKeys::Abyss)      return "Abyss";
-    if (key == TypeKeys::Ritual)     return "Ritual";
-    if (key == TypeKeys::Overseer)   return "Overseer";
-    if (key == TypeKeys::Temple)     return "Temple";
-    if (key == TypeKeys::Global)     return "All types";
-    return "Unknown";
+// Key of the label drawn on the tablet in game ("Breach").
+inline const char* TypeShortKey(std::string_view key) {
+    if (key == TypeKeys::Irradiated) return Key("type_short_irradiated");
+    if (key == TypeKeys::Breach)     return Key("type_short_breach");
+    if (key == TypeKeys::Delirium)   return Key("type_short_delirium");
+    if (key == TypeKeys::Expedition) return Key("type_short_expedition");
+    if (key == TypeKeys::Abyss)      return Key("type_short_abyss");
+    if (key == TypeKeys::Ritual)     return Key("type_short_ritual");
+    if (key == TypeKeys::Overseer)   return Key("type_short_overseer");
+    if (key == TypeKeys::Temple)     return Key("type_short_temple");
+    if (key == TypeKeys::Global)     return Key("type_name_global");
+    return Key("type_short_unknown");
 }
 
-// Three-letter label used when the short name does not fit the cell.
-inline const char* Abbreviation(std::string_view key) {
-    if (key == TypeKeys::Irradiated) return "Irr";
-    if (key == TypeKeys::Breach)     return "Bre";
-    if (key == TypeKeys::Delirium)   return "Del";
-    if (key == TypeKeys::Expedition) return "Exp";
-    if (key == TypeKeys::Abyss)      return "Aby";
-    if (key == TypeKeys::Ritual)     return "Rit";
-    if (key == TypeKeys::Overseer)   return "Ovs";
-    if (key == TypeKeys::Temple)     return "Tmp";
-    return "?";
+// Key of the three-letter label used when the short name does not fit the cell;
+// nullptr for a type without one (drawn as "?").
+inline const char* TypeAbbreviationKey(std::string_view key) {
+    if (key == TypeKeys::Irradiated) return Key("type_abbr_irradiated");
+    if (key == TypeKeys::Breach)     return Key("type_abbr_breach");
+    if (key == TypeKeys::Delirium)   return Key("type_abbr_delirium");
+    if (key == TypeKeys::Expedition) return Key("type_abbr_expedition");
+    if (key == TypeKeys::Abyss)      return Key("type_abbr_abyss");
+    if (key == TypeKeys::Ritual)     return Key("type_abbr_ritual");
+    if (key == TypeKeys::Overseer)   return Key("type_abbr_overseer");
+    if (key == TypeKeys::Temple)     return Key("type_abbr_temple");
+    return nullptr;
 }
 
 }  // namespace TabletHelper

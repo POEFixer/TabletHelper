@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.6
+
+- Follows the program language (ten languages).
+- Tablet names and bonus lines read as the game words them in each language, and the bonus search and the bonus order follow the translated names.
+- The bonus search also finds a bonus by its English name, in any program language.
+
 ## 1.4.5
 
 - Works with the separate menu window (POEFixer 366): the host hands the plugin the right drawing context for its settings tab and for its overlay.

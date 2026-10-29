@@ -37,7 +37,9 @@
     <ClInclude Include="src\TabletRanges.h"><Filter>Source</Filter></ClInclude>
     <ClInclude Include="src\TabletScanner.h"><Filter>Source</Filter></ClInclude>
     <ClInclude Include="src\TabletTypes.h"><Filter>Source</Filter></ClInclude>
+    <ClInclude Include="src\TextUtil.h"><Filter>Source</Filter></ClInclude>
     <ClInclude Include="src\TabletWorker.h"><Filter>Source</Filter></ClInclude>
+    <ClInclude Include="src\lang_en.generated.h"><Filter>Source</Filter></ClInclude>
     <ClInclude Include="lib\nlohmann\json.hpp"><Filter>lib</Filter></ClInclude>
     <ClInclude Include="..\..\POEFixer\plugin_sdk\PluginAbi.h"><Filter>SDK</Filter></ClInclude>
     <ClInclude Include="..\..\POEFixer\plugin_sdk\PluginSDK.h"><Filter>SDK</Filter></ClInclude>

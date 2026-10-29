@@ -9,12 +9,15 @@
 // (a name too long for its cell uses a three-letter code), bonus names are
 // shortened with an ellipsis, a "+N" line stands for those that do not fit, and
 // a cell with no room for names shows a check-mark count instead. Coordinates
-// are pixel-snapped.
+// are pixel-snapped. Names are translated here, on the render thread, into the
+// program language (PluginI18n); a language switch or a font reload rebuilds the
+// layouts.
 
 #include "Settings.h"
 #include "TabletWorker.h"
 #include "../../../POEFixer/imgui/imgui.h"
 
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <vector>
@@ -51,6 +54,8 @@ private:
 
     std::shared_ptr<const Frame> m_frame;
     float m_baseFont = 0.f;
+    ImFont* m_font = nullptr;        // the font the layouts were measured with
+    uint64_t m_textRevision = 0;     // PluginSDK::I18n::Revision() of their texts
     bool m_showLabel = false, m_showUses = false, m_showBonuses = false;
     TabletHelperConfig::HighlightMode m_mode = TabletHelperConfig::HighlightMode::Border;
     int m_thickness = 0;

@@ -52,8 +52,7 @@ struct ValueRange {
 
 // One tablet type's (or the "All types" block's) highlight rule.
 struct TypeConfig {
-    std::string key;          // TabletHelper::TypeKeys::* (JSON identity, ASCII)
-    std::string displayName;  // canonical, never read from JSON
+    std::string key;          // TabletHelper::TypeKeys::* (JSON identity, ASCII; TypeNameKey names it)
     bool  enabled = true;
     float color[4] = {0.0f, 0.749f, 1.0f, 1.0f};
     int   minUsesLeft = 0;
@@ -74,7 +73,6 @@ inline std::vector<TypeConfig> DefaultTypes() {
     auto make = [](const char* key, float r, float g, float b, bool enabled) {
         TypeConfig t;
         t.key = key;
-        t.displayName = DisplayName(key);
         t.enabled = enabled;
         t.color[0] = r; t.color[1] = g; t.color[2] = b; t.color[3] = 1.0f;
         return t;
@@ -136,7 +134,7 @@ inline TypeConfig* FindTypeIn(std::vector<TypeConfig>& types, const std::string&
 }  // namespace detail
 
 // Overlays saved per-type values (matched by key) onto a fresh DefaultTypes()
-// list: the type list, its order and the display names stay canonical, only the
+// list: the type list and its order stay canonical, only the
 // editable fields come from JSON, each clamped to its control bounds.
 inline void ApplyTypeOverrides(std::vector<TypeConfig>& types, const nlohmann::json& arr) {
     if (!arr.is_array()) return;
